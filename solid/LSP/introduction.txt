@@ -1,0 +1,48 @@
+🔷 L – Liskov Substitution Principle (LSP)
+✅ Definition:
+Objects of a superclass (or interface) should be replaceable with objects of its subclasses (or implementing types) without breaking the correctness of the program.
+
+In Go terms:
+If type T implements interface I, we should be able to use T anywhere that I is expected without surprises.
+
+🔍 Example: Violating LSP
+Let’s say we have this interface:
+
+type Bird interface {
+	Fly()
+}
+Now we define:
+
+type Sparrow struct{}
+func (s Sparrow) Fly() { fmt.Println("Sparrow flying") }
+
+type Ostrich struct{}
+func (o Ostrich) Fly() { panic("Ostriches can't fly!") } // 🚨 BAD
+This violates LSP:
+
+Ostrich is a Bird, but it can't safely substitute other Birds in code that expects Fly().
+
+✅ How to Follow LSP in Go
+Use interfaces only when behavior is actually shared. Split interfaces if needed.
+
+type FlyingBird interface {
+	Fly()
+}
+
+type WalkingBird interface {
+	Walk()
+}
+Then:
+
+type Sparrow struct{}
+func (s Sparrow) Fly() { fmt.Println("Sparrow flying") }
+
+type Ostrich struct{}
+func (o Ostrich) Walk() { fmt.Println("Ostrich walking") }
+Now each bird only implements what it's capable of, and you avoid breaking substitution expectations.
+
+🧠 Key LSP Guidelines
+Principle	Why It Matters
+Do not implement behavior an object can’t safely perform	Avoid unexpected crashes and panics
+Split interfaces by behavior	Prevent forcing types to do things they shouldn't
+Treat interface contracts seriously	Design for trustworthy substitution

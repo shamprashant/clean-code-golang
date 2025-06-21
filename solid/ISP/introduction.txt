@@ -1,0 +1,53 @@
+🔷 I – Interface Segregation Principle (ISP)
+✅ Definition:
+Clients should not be forced to depend on interfaces they do not use.
+
+🧠 What It Means in Go
+In Go, large interfaces are discouraged. Instead, you should define small, focused interfaces so that types only implement what they actually need.
+
+🚫 Bad Example – Violating ISP
+type MultiFunctionDevice interface {
+	Print()
+	Scan()
+	Fax()
+}
+
+type OldPrinter struct{}
+
+func (op OldPrinter) Print() { fmt.Println("Printing...") }
+func (op OldPrinter) Scan()  { panic("Scan not supported") }  // ❌
+func (op OldPrinter) Fax()   { panic("Fax not supported") }   // ❌
+Here, OldPrinter is forced to implement methods it doesn't support.
+
+This violates ISP and increases coupling and potential bugs.
+
+✅ Good Example – Following ISP
+type Printer interface {
+	Print()
+}
+
+type Scanner interface {
+	Scan()
+}
+
+type Faxer interface {
+	Fax()
+}
+
+type OldPrinter struct{}
+func (op OldPrinter) Print() { fmt.Println("Printing...") } // ✅ Only what it needs
+Now each device only implements what it truly supports.
+
+If you want a device that can do all three, you can compose:
+
+type MultiFunctionDevice interface {
+	Printer
+	Scanner
+	Faxer
+}
+🧠 Key Benefit of ISP
+Problem Solved	Explanation
+Reduces unused method implementations	Less boilerplate, cleaner code
+Allows granular mocking/testing	Test only the needed behavior
+Easier maintenance & evolution	Interfaces evolve independently without breaking others
+

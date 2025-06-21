@@ -1,0 +1,49 @@
+🔷 D – Dependency Inversion Principle (DIP)
+✅ Definition:
+High-level modules should not depend on low-level modules.
+Both should depend on abstractions.
+Abstractions should not depend on details.
+Details should depend on abstractions.
+
+🧠 In Go Terms:
+Let’s say you have a controller that uses a concrete service:
+
+type FileLogger struct{}
+
+func (f FileLogger) Log(msg string) {
+	fmt.Println("Writing to file:", msg)
+}
+
+type Controller struct {
+	logger FileLogger // ❌ high-level code depends on low-level detail
+}
+
+func (c Controller) Process() {
+	c.logger.Log("Processing request")
+}
+This is tight coupling — Controller depends on a specific logger.
+
+✅ DIP-compliant version:
+type Logger interface {
+	Log(string)
+}
+
+type FileLogger struct{}
+func (f FileLogger) Log(msg string) {
+	fmt.Println("Writing to file:", msg)
+}
+
+type Controller struct {
+	logger Logger // ✅ high-level depends on abstraction
+}
+
+func (c Controller) Process() {
+	c.logger.Log("Processing request")
+}
+Now you can inject any logger: ConsoleLogger, RemoteLogger, etc.
+
+💡 Key Insight:
+High-level logic (like Controller) should not care how logging is done.
+
+We invert the dependency by injecting abstractions, not concretes.
+

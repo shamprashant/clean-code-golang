@@ -1,0 +1,31 @@
+🔹 S – Single Responsibility Principle (SRP)
+Definition:
+A class (or struct/module/function in Go) should have only one reason to change, i.e., it should only have one responsibility.
+
+✅ In Go:
+Each function or struct should focus on one thing. If it starts doing more than one type of task, break it down.
+
+✅ Real-world analogy:
+A UserManager struct should handle user data (e.g., fetch/update). It shouldn’t send emails—leave that to EmailService.
+
+✅ Go Example (Bad SRP Violation):
+type UserService struct{}
+
+func (us UserService) RegisterUser(email, password string) {
+    // Save user to DB
+    fmt.Println("Saving user:", email)
+
+    // Send welcome email (BAD! Different responsibility)
+    fmt.Println("Sending welcome email to:", email)
+}
+✅ Improved Version (Good SRP):
+type UserService struct{}
+type EmailService struct{}
+
+func (us UserService) RegisterUser(email, password string) {
+    fmt.Println("Saving user:", email)
+}
+
+func (es EmailService) SendWelcomeEmail(email string) {
+    fmt.Println("Sending welcome email to:", email)
+}

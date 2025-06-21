@@ -1,0 +1,51 @@
+🔸 O – Open/Closed Principle (OCP)
+
+✅ Definition:
+Software entities should be open for extension, but closed for modification.
+
+This means:
+
+You should be able to add new functionality without changing existing code.
+
+Instead of editing a function/struct every time a new case appears, use interfaces or abstractions.
+
+💡 Real-World Analogy (in Go)
+Suppose you want to calculate discounts for users:
+
+Normal users get 10%
+
+Premium users get 20%
+
+A bad way would be:
+
+func getDiscount(userType string) int {
+    if userType == "normal" {
+        return 10
+    } else if userType == "premium" {
+        return 20
+    }
+    return 0
+}
+This violates OCP. If tomorrow you want to add "gold" users, you have to change this function.
+
+✅ Go OCP-Compliant Design (Using Interfaces)
+
+type DiscountStrategy interface {
+	GetDiscount() int
+}
+
+type NormalUser struct{}
+func (n NormalUser) GetDiscount() int { return 10 }
+
+type PremiumUser struct{}
+func (p PremiumUser) GetDiscount() int { return 20 }
+
+func printDiscount(d DiscountStrategy) {
+	fmt.Println("Discount:", d.GetDiscount(), "%")
+}
+Now if you want to add a new user type:
+
+type GoldUser struct{}
+func (g GoldUser) GetDiscount() int { return 30 }
+No existing code changes! ✅ You just extended the system.
+

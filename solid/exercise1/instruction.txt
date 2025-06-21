@@ -1,0 +1,52 @@
+🧩 SOLID Final Challenge: "Cloud Backup & Alert System"
+🌍 Scenario:
+You’re building part of a distributed Cloud Backup System (like Acronis or Veeam). The system needs to back up various data sources and send alerts based on success/failure, while keeping everything clean, modular, testable, and scalable.
+
+🧠 Your system should handle:
+Different backup sources: file system, database, remote APIs.
+
+Different storage targets: S3, local disk, Azure Blob, etc.
+
+Each backup should be logged.
+
+Failures should trigger alerts through email, SMS, or webhook.
+
+The system must support adding new backup types, loggers, alert channels with minimal to no code changes.
+
+Make sure all logic follows SRP, OCP, LSP, ISP, and DIP.
+
+🧨 Requirements:
+No if/switch-based type checking in core logic
+
+No concrete type dependencies in business logic
+
+Alerting and logging should be optional and pluggable
+
+Error handling must be graceful and extensible
+
+Interfaces must be granular and meaningful
+
+Think about how a production engineer would test or extend it
+
+Favor composition over inheritance, lean code, idiomatic Go
+
+🧪 Bonus (Optional):
+If you want to go further:
+
+Add support for retry logic on failure without cluttering the backup logic
+
+Allow the alerting channel to send rich metadata about the failed job
+
+Allow mocking/stubbing key interfaces for unit testing
+
+Make the system environment-configurable (dev/prod)
+
+📦 Deliverables:
+A single Go file or package with your clean architecture
+
+Follow idiomatic Go conventions
+
+Compose interfaces and types like a senior engineer
+
+Ensure everything feels production-ready and testable
+
