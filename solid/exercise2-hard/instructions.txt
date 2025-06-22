@@ -1,0 +1,67 @@
+🧩 Challenge: "Event-Driven Notification System with Pluggable Rules"
+🌍 Scenario:
+You’re designing the notification engine for an enterprise SaaS platform. Different modules (billing, security, account management) can emit events — and based on those events, rules determine whether to notify users via different channels.
+
+🎯 Requirements:
+Events include:
+
+"low_balance"
+
+"unauthorized_login"
+
+"payment_success"
+
+"account_deletion"
+
+Each event must be processed by rule engines (e.g., should we notify or suppress?)
+
+Each event, when allowed, should be passed to a notifier: email, SMS, Slack, etc.
+
+All rules, channels, and event handlers should be:
+
+Modular
+
+Easily pluggable
+
+Configurable per environment or tenant
+
+⚠️ Constraints:
+New events, rules, or channels should be addable without touching core logic
+
+No switch or if-else chain based on event types
+
+Event handlers must be substitutable and testable
+
+Rule processing must follow SRP — one rule per struct
+
+The system must log actions and errors using injected loggers
+
+📌 Optional Bonus (for advanced design)
+Allow rules to be composed (e.g., LowBalanceRule + VIPUserRule)
+
+Add event enrichers (e.g., attach location to login alert)
+
+Implement middleware-style hooks (e.g., auditing/logging before & after processing)
+
+Add support for tenant-scoped logic: some users want SMS, others want Slack only
+
+📦 Deliverable
+Write the Go code that:
+
+Defines events, rules, and notification channels
+
+Uses interfaces and composition
+
+Fully respects all SOLID principles
+
+Has a Processor that drives the logic
+
+Logs everything through a Logger abstraction
+
+🧠 Example Test Cases You Should Handle
+If an "unauthorized_login" event happens, apply a rule → if allowed, send SMS + Email.
+
+If a "low_balance" event comes from a non-premium user, suppress the notification.
+
+If an event fails to send via one channel, log and continue.
+
