@@ -1,0 +1,115 @@
+Let's Start with the Factory Method Pattern
+✅ What is Factory Method Pattern?
+A Factory Method is a design pattern that:
+
+Encapsulates object creation logic, allowing subclasses or components to decide which class to instantiate.
+
+❓ Why Do We Need It?
+Imagine you don’t use Factory Pattern and do this:
+
+func main() {
+	db := MySQL{}
+	fs := FileSystemStorage{}
+logger := ConsoleLogger{}
+}
+Now your main() knows:
+
+About all types (MySQL, FileSystemStorage, ConsoleLogger)
+
+How to initialize them
+
+When to use which
+
+➡️ This creates tight coupling, violates OCP, and makes testing or switching implementations a pain.
+
+🔥 Benefits of Factory Method:
+Benefit	Why It’s Valuable
+OCP-friendly	Add new types without touching client code
+DIP-friendly	Create concrete types behind interfaces
+Cleaner main()	No new scattered everywhere
+Testing becomes easy	Swap mocks via factory
+
+🏗️ Analogy
+You're building a house. Do you:
+
+A: Create your own doors, windows, and bricks every time manually?
+
+B: Ask the construction company to give you what you need?
+
+Factory Method is like the construction company — it gives you the right object, ready to use, and abstracts the creation logic.
+
+✅ Real Example in Go: Notification Service
+We’ll build a factory that returns a notifier (SMS, Email, Slack) depending on config.
+
+🎯 Goal:
+
+notifier := notifierFactory("slack")
+notifier.Send("Backup completed")
+💻 Code
+
+package main
+
+import "fmt"
+
+// --- Notifier Interface ---
+type Notifier interface {
+	Send(message string)
+}
+
+// --- Concrete Notifiers ---
+type EmailNotifier struct{}
+func (e EmailNotifier) Send(msg string) {
+	fmt.Println("Email:", msg)
+}
+
+type SMSNotifier struct{}
+func (s SMSNotifier) Send(msg string) {
+	fmt.Println("SMS:", msg)
+}
+
+type SlackNotifier struct{}
+func (s SlackNotifier) Send(msg string) {
+	fmt.Println("Slack:", msg)
+}
+
+// --- Factory Method ---
+func GetNotifier(channel string) Notifier {
+	switch channel {
+	case "email":
+		return EmailNotifier{}
+	case "sms":
+		return SMSNotifier{}
+	case "slack":
+		return SlackNotifier{}
+	default:
+		panic("Unsupported notification channel: " + channel)
+	}
+}
+
+// --- Main ---
+func main() {
+	notifier := GetNotifier("slack")
+	notifier.Send("Backup completed")
+}
+🧠 What You Achieved
+✅ main() only depends on the Notifier interface
+✅ You can add new notifiers without touching main()
+✅ Swappable in tests
+✅ Centralized creation logic
+
+🔥 If You Didn’t Use Factory Pattern?
+You’d need:
+
+if config == "email" {
+    notifier = EmailNotifier{}
+} else if config == "sms" {
+    notifier = SMSNotifier{}
+}
+And this logic would be scattered across the codebase.
+
+Adding a new channel requires modifying all those places.
+
+Breaks Open/Closed Principle
+
+Harder to test — can't easily inject mocks
+
