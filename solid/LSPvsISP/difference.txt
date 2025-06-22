@@ -1,0 +1,98 @@
+🧠 1. LSP – Liskov Substitution Principle
+"Subtypes must be substitutable for their base types without breaking behavior."
+— Barbara Liskov
+
+✅ In Simple Terms:
+If Dog is a subtype of Animal, then anywhere you expect an Animal, passing a Dog should not break the code.
+
+❌ Violation Example:
+
+type Bird interface {
+	Fly()
+}
+
+type Crow struct{}
+func (c Crow) Fly() {
+	fmt.Println("Crow is flying")
+}
+
+type Ostrich struct{}
+func (o Ostrich) Fly() {
+	panic("Ostrich can't fly!") // ❌ Bad design
+}
+
+func MakeBirdFly(b Bird) {
+	b.Fly()
+}
+
+func main() {
+	var b Bird = Ostrich{} // Looks okay...
+	MakeBirdFly(b)         // 💥 PANIC at runtime
+}
+➡️ Ostrich violates LSP. Even though it's technically a "Bird", it doesn’t support flying.
+
+🧠 2. ISP – Interface Segregation Principle
+"Clients should not be forced to depend on interfaces they do not use."
+
+✅ In Simple Terms:
+Split big fat interfaces into smaller ones.
+Each type should only implement methods it actually needs.
+
+❌ Violation Example:
+
+type Machine interface {
+	Print()
+	Scan()
+	Fax()
+}
+
+type OldPrinter struct{}
+
+func (p OldPrinter) Print() {
+	fmt.Println("Printing...")
+}
+
+func (p OldPrinter) Scan() {
+	panic("Not supported")
+}
+
+func (p OldPrinter) Fax() {
+	panic("Not supported")
+}
+➡️ OldPrinter shouldn’t be forced to implement Scan() or Fax().
+
+✅ ISP Solution in Go: Split Interfaces
+
+type Printer interface {
+	Print()
+}
+
+type Scanner interface {
+	Scan()
+}
+
+type OldPrinter struct{}
+func (p OldPrinter) Print() {
+	fmt.Println("Print supported")
+}
+Now OldPrinter only implements what it supports ✅
+
+🧑‍🏫 LSP vs ISP – 🔍 Key Differences
+Principle	LSP	ISP
+Concerned With	Correct behavior of subtypes	Correct interface design
+Breaks if...	Subtype breaks expectations of base type	Interface forces a type to implement unused methods
+Example	Ostrich can't Fly() but implements Bird	Old printer must Scan() and Fax() but can’t
+Fix	Don’t generalize wrongly; or split types	Break big interfaces into small focused ones
+Go idiom	Keep interface usage tight	Use small, purpose-driven interfaces
+
+🧪 Think of it like this:
+LSP = "Don't lie about what a type can do."
+
+ISP = "Don't force a type to pretend it can do more than it needs."
+
+✅ In Go, always remember:
+Define interfaces at the usage site (not at implementation site)
+
+Keep interfaces small and focused
+
+Subtypes (concrete structs) should honestly implement what’s expected
