@@ -1,0 +1,38 @@
+Builder Pattern — Real-World Use Case
+The Builder Pattern is useful when:
+
+You have a complex object with many optional or dependent fields.
+
+You want to build that object step-by-step, with readable and safe construction.
+
+You want to avoid constructors with too many arguments.
+
+✅ When to Use It
+Let’s say you're building a BackupJob struct that has:
+
+Source
+
+Destination
+
+Compression
+
+Encryption
+
+RetryPolicy
+
+NotificationChannels
+
+Scheduling details
+
+Passing all this in a single constructor is ugly and error-prone.
+
+Instead, you can do:
+
+job := NewBackupJobBuilder().
+	From("db-server").
+	To("s3://bucket").
+	WithEncryption("AES256").
+	WithRetries(3).
+	OnSchedule("nightly").
+	Build()
+Looks clean, expressive, and flexible ✅
