@@ -1,0 +1,68 @@
+🧠 What is the Prototype Pattern?
+The Prototype Pattern lets you clone objects without tightly coupling your code to their concrete types.
+
+It’s useful when:
+
+Creating a new object is expensive (e.g., loading config, DB models, templates)
+
+You want to duplicate objects with slight modifications
+
+You want to use a standard blueprint/template to create copies
+
+🏗 Real-world Analogy:
+Imagine you have a template email, and you want to generate multiple emails just by changing the recipient name. You don’t want to write the entire content again and again.
+
+So you copy the prototype and customize only what you need.
+
+👨‍💻 Go Implementation
+Go doesn't have native cloning like in Java, but you can implement it using:
+
+✅ Clone() Method
+
+type Cloneable interface {
+	Clone() Cloneable
+}
+Each struct that can be cloned implements Clone().
+
+📦 Example: Document Template Cloning
+
+package main
+
+import "fmt"
+
+type Document struct {
+	Title   string
+	Content string
+	Author  string
+}
+
+func (d *Document) Clone() *Document {
+	// Return a shallow copy
+	copy := *d
+	return &copy
+}
+✅ Usage
+
+func main() {
+	template := &Document{
+		Title:   "Welcome Email",
+		Content: "Dear User, Welcome to our platform!",
+		Author:  "Admin",
+	}
+
+	userDoc := template.Clone()
+	userDoc.Title = "Welcome Prashant"
+	userDoc.Content = "Dear Prashant, Welcome to our platform!"
+
+	fmt.Printf("📄 Template: %+v\n", template)
+	fmt.Printf("📄 UserDoc: %+v\n", userDoc)
+}
+✅ Output:
+
+📄 Template: &{Title:Welcome Email Content:Dear User, Welcome to our platform! Author:Admin}
+📄 UserDoc: &{Title:Welcome Prashant Content:Dear Prashant, Welcome to our platform! Author:Admin}
+✨ Benefits
+Benefit	Description
+⚡ Fast	Avoids rebuilding complex objects
+🧼 Clean	Promotes reuse of object "templates"
+🛡 Safe	You don’t accidentally mutate the original

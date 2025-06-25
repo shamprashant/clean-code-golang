@@ -1,0 +1,49 @@
+🧪 Challenge: Clone a Deployment Template (with Nested Structures)
+🧱 Structs to Work With:
+
+type EnvironmentVariable struct {
+	Key   string
+	Value string
+}
+
+type Container struct {
+	Name     string
+	Image    string
+	EnvVars  []EnvironmentVariable
+}
+
+type DeploymentTemplate struct {
+	AppName   string
+	Replicas  int
+	Containers []Container
+	Metadata  map[string]string
+}
+🎯 Your Task:
+Implement a Clone() method for DeploymentTemplate that:
+
+Returns a new independent copy
+
+Also deep-copies:
+
+Containers slice (not just references)
+
+EnvVars inside each container
+
+Metadata map (new map, same values)
+
+✨ Bonus Challenge (Optional):
+Allow chaining a method like:
+
+Clone().WithMetadata("team", "devops").WithReplicas(10)
+That part is optional. The core goal is a correct deep clone.
+
+✅ Expected Behavior
+ 
+original := &DeploymentTemplate{...}
+copy := original.Clone()
+
+copy.AppName = "CopyApp"
+copy.Containers[0].Image = "new:image"
+copy.Metadata["team"] = "QA"
+
+// original should remain unchanged
