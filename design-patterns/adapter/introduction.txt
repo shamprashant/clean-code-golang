@@ -1,0 +1,67 @@
+🧠 What is the Adapter Pattern?
+Adapter Pattern allows incompatible interfaces to work together.
+It converts the interface of a class into another interface the client expects.
+
+In Go, this usually means:
+
+You have a type with methods that don’t match the interface you need.
+
+You create a wrapper (adapter) that translates between them.
+
+🛠 Real-World Analogy
+Imagine a 2-pin plug (your device) and a 3-pin socket (the interface you must use).
+An adapter allows them to connect, without changing either.
+
+🎯 Use Case in Go
+You have:
+
+An existing type (e.g. LegacyPrinter)
+
+A required interface (e.g. ModernPrinter)
+
+You write an adapter struct to bridge the gap
+
+✅ Code Example
+🧾 1. Required Interface
+
+type Printer interface {
+	Print(text string) string
+}
+🏛 2. Legacy Code (Can’t modify)
+
+type OldPrinter struct{}
+
+func (op OldPrinter) PrintInOldWay(text string) string {
+	return fmt.Sprintf("Old Printer: %s", text)
+}
+🧩 3. Adapter
+
+type OldPrinterAdapter struct {
+	OldPrinter OldPrinter
+}
+
+func (opa OldPrinterAdapter) Print(text string) string {
+	// Adapting the legacy method to match the interface
+	return opa.OldPrinter.PrintInOldWay(text)
+}
+✅ Usage
+
+func PrintAnything(p Printer, text string) {
+	fmt.Println(p.Print(text))
+}
+
+func main() {
+	old := OldPrinter{}
+	adapter := OldPrinterAdapter{OldPrinter: old}
+
+	PrintAnything(adapter, "Adapter Pattern Working!")
+}
+✅ Output
+
+Old Printer: Adapter Pattern Working!
+🔥 Real-World Use Cases
+Scenario	Adapter Usage
+Logging system expects Log(string)	Your struct has WriteLog(string)
+Modern API needs Send(json)	Legacy uses PostXML(xml)
+Payment gateway expects Pay()	Legacy client uses ProcessPayment()
+
