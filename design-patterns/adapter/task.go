@@ -50,7 +50,7 @@ func (v VLCPlayerAdapter) PlayAudio(file string) string {
 	return v.VLCPlayer.PlayVLC(file)
 }
 
-func main() {
-	vlc := VLCPlayerAdapter{}
-	fmt.Println(vlc.PlayAudio("oonchi.mp3"))
-}
+// func main() {
+// 	vlc := VLCPlayerAdapter{}
+// 	fmt.Println(vlc.PlayAudio("oonchi.mp3"))
+// }
