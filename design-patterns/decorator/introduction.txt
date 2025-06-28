@@ -1,0 +1,82 @@
+🎁 Decorator Pattern – What, Why, and How
+🧠 Definition:
+Decorator Pattern lets you dynamically add new behavior to objects without modifying their existing code.
+
+It promotes composition over inheritance, which is exactly what Go prefers.
+
+🧾 Real-World Analogy:
+Imagine you order a plain coffee ☕.
+Then, you add:
+
+Extra milk 🥛
+
+Sugar 🧂
+
+Chocolate 🍫
+
+Each of these adds extra behavior or cost, without changing the coffee's core logic.
+
+💻 In Go: When Do You Use It?
+You want to extend functionality of objects at runtime
+
+You want to layer behavior without bloating the core logic
+
+You want to apply Open/Closed Principle — open for extension, closed for modification
+
+🎯 Goal Example
+We’ll build a basic notifier system that sends notifications:
+
+Base Notifier: sends via Email
+
+Then, you want to add SMS, add Slack, add Webhook, etc.
+
+But you don’t want to rewrite EmailNotifier.
+
+✅ Step-by-Step Code
+
+1. Define the Component Interface
+
+type Notifier interface {
+	Send(message string)
+}
+2. Concrete Component (base notifier)
+
+type EmailNotifier struct{}
+
+func (e EmailNotifier) Send(message string) {
+	fmt.Println("Sending Email:", message)
+}
+3. Decorators
+
+type SMSNotifier struct {
+	Notifier Notifier
+}
+
+func (s SMSNotifier) Send(message string) {
+	s.Notifier.Send(message) // call previous notifier
+	fmt.Println("Sending SMS:", message)
+}
+
+type SlackNotifier struct {
+	Notifier Notifier
+}
+
+func (sn SlackNotifier) Send(message string) {
+	sn.Notifier.Send(message)
+	fmt.Println("Sending Slack message:", message)
+}
+
+4. Usage in main
+
+func main() {
+	email := EmailNotifier{}
+	sms := SMSNotifier{Notifier: email}
+	slack := SlackNotifier{Notifier: sms}
+
+	slack.Send("Your order has been shipped")
+}
+
+✅ Output:
+Sending Email: Your order has been shipped
+Sending SMS: Your order has been shipped
+Sending Slack message: Your order has been shipped
