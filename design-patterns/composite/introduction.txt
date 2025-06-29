@@ -1,0 +1,69 @@
+🌳 Composite Pattern – What, Why, and How
+🧠 Definition:
+Composite Pattern lets you treat individual objects and compositions of objects uniformly.
+
+It’s ideal when working with tree-like structures, such as:
+
+HTML/XML elements
+
+Filesystems (Folders and Files)
+
+Organization charts
+
+UI Components
+
+🧾 Real-World Analogy
+You have:
+
+Employees (Leaf)
+
+Managers (who manage Employees or other Managers → Composite)
+
+You want to treat both leaf and composite objects with a common method like DisplayDetails().
+
+🎯 In Go: Core Structure
+1. Define Component Interface:
+
+type OrganizationMember interface {
+	Display()
+}
+2. Implement Leafs and Composites:
+Employee (Leaf)
+
+type Employee struct {
+	Name string
+	Role string
+}
+
+func (e Employee) Display() {
+	fmt.Printf("Employee: %s (%s)\n", e.Name, e.Role)
+}
+Manager (Composite)
+
+type Manager struct {
+	Name     string
+	Team     []OrganizationMember
+}
+
+func (m Manager) Display() {
+	fmt.Printf("Manager: %s\n", m.Name)
+	for _, member := range m.Team {
+		member.Display()
+	}
+}
+3. In main():
+
+func main() {
+	dev1 := Employee{Name: "Prashant", Role: "Developer"}
+	dev2 := Employee{Name: "Arun", Role: "QA"}
+	lead := Manager{Name: "Sonia", Team: []OrganizationMember{dev1, dev2}}
+
+	cto := Manager{Name: "Ankit", Team: []OrganizationMember{lead}}
+	cto.Display()
+}
+✅ Output:
+
+Manager: Ankit
+Manager: Sonia
+Employee: Prashant (Developer)
+Employee: Arun (QA)
